@@ -154,7 +154,7 @@ else
 end
 
 if macos_version > "10.8"
-  unless File.exist? "/Library/Developer/CommandLineTools/usr/bin/clang"
+  unless File.exist? "/usr/bin/clang"
     ohai "Installing the Command Line Tools (expect a GUI popup):"
     sudo "/usr/bin/xcode-select", "--install"
     puts "Press any key when the installation has completed."
