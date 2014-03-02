@@ -70,7 +70,7 @@ class Keg < Pathname
   end
 
   def linked_keg_record
-    @linked_keg_record ||= HOMEBREW_REPOSITORY/"Library/LinkedKegs"/fname
+    @linked_keg_record ||= HOMEBREW_SEREPOSITORY/"Library/LinkedKegs"/fname
   end
 
   def linked?
