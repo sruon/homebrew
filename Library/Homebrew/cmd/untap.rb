@@ -40,7 +40,7 @@ module Homebrew extend self
       end
     end
 
-    HOMEBREW_REPOSITORY.join("Library/Formula/.gitignore").atomic_write(gitignores * "\n")
+    HOMEBREW_SEREPOSITORY.join("Library/Formula/.gitignore").atomic_write(gitignores * "\n")
 
     untapped
   end
