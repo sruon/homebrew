@@ -54,8 +54,8 @@ end
 HOMEBREW_PREFIX = Pathname.new("~/.brew").expand_path # Where we link under
 HOMEBREW_REPOSITORY = Pathname.new(HOMEBREW_BREW_FILE).realpath.dirname.parent # Where .git is found
 HOMEBREW_SEREPOSITORY = Pathname.new("~/.brew").expand_path
-HOMEBREW_LIBRARY = HOMEBREW_REPOSITORY/"Library"
-HOMEBREW_CONTRIB = HOMEBREW_REPOSITORY/"Library/Contributions"
+HOMEBREW_LIBRARY = HOMEBREW_SEREPOSITORY/"Library"
+HOMEBREW_CONTRIB = HOMEBREW_SEREPOSITORY/"Library/Contributions"
 
 # Where we store built products; /usr/local/Cellar if it exists,
 # otherwise a Cellar relative to the Repository.
