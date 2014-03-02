@@ -26,13 +26,13 @@ def cache
     if home_cache.directory? and home_cache.writable_real?
       home_cache
     else
-      root_cache = Pathname.new("/Library/Caches/Homebrew")
+      root_cache = Pathname.new("~/Library/Caches/Homebrew")
       class << root_cache
         alias :oldmkpath :mkpath
         def mkpath
           unless exist?
             oldmkpath
-            chmod 0777
+            chmod 0744
           end
         end
       end
@@ -51,18 +51,14 @@ if not defined? HOMEBREW_BREW_FILE
   HOMEBREW_BREW_FILE = ENV['HOMEBREW_BREW_FILE'] || which('brew').to_s
 end
 
-HOMEBREW_PREFIX = Pathname.new(HOMEBREW_BREW_FILE).dirname.parent # Where we link under
+HOMEBREW_PREFIX = Pathname.new("~/.brew").expand_path # Where we link under
 HOMEBREW_REPOSITORY = Pathname.new(HOMEBREW_BREW_FILE).realpath.dirname.parent # Where .git is found
 HOMEBREW_LIBRARY = HOMEBREW_REPOSITORY/"Library"
 HOMEBREW_CONTRIB = HOMEBREW_REPOSITORY/"Library/Contributions"
 
 # Where we store built products; /usr/local/Cellar if it exists,
 # otherwise a Cellar relative to the Repository.
-HOMEBREW_CELLAR = if (HOMEBREW_PREFIX+"Cellar").exist?
-  HOMEBREW_PREFIX+"Cellar"
-else
-  HOMEBREW_REPOSITORY+"Cellar"
-end
+HOMEBREW_CELLAR = Pathname.new("~/.brew/Cellar").expand_path
 
 HOMEBREW_LOGS = Pathname.new(ENV['HOMEBREW_LOGS'] || '~/Library/Logs/Homebrew/').expand_path
 
