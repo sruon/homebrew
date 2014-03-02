@@ -65,6 +65,8 @@ HOMEBREW_LOGS = Pathname.new(ENV['HOMEBREW_LOGS'] || '~/Library/Logs/Homebrew/')
 
 HOMEBREW_TEMP = Pathname.new('~/.brew/tmp').expand_path
 
+FileUtils.mkdir_p HOMEBREW_TEMP if not File.exist? HOMEBREW_TEMP
+
 RUBY_BIN = Pathname.new(RbConfig::CONFIG['bindir'])
 RUBY_PATH = RUBY_BIN + RbConfig::CONFIG['ruby_install_name'] + RbConfig::CONFIG['EXEEXT']
 
