@@ -52,7 +52,7 @@ if not defined? HOMEBREW_BREW_FILE
 end
 
 HOMEBREW_PREFIX = Pathname.new("~/.brew").expand_path # Where we link under
-HOMEBREW_REPOSITORY = Pathname.new(HOMEBREW_BREW_FILE).realpath.dirname.parent # Where .git is found
+HOMEBREW_REPOSITORY = Pathname.new("~/.brew").expand_path # Where .git is found
 HOMEBREW_LIBRARY = HOMEBREW_REPOSITORY/"Library"
 HOMEBREW_CONTRIB = HOMEBREW_REPOSITORY/"Library/Contributions"
 
