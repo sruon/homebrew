@@ -34,13 +34,20 @@ end
 
 class Xulrunner < Formula
   homepage "https://developer.mozilla.org/docs/XULRunner"
-  url "https://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/28.0/source/xulrunner-28.0.source.tar.bz2"
-  sha1 "7965105b34441ebfab650930dffa4648c85ac6c6"
+  url "https://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/29.0/source/xulrunner-29.0.source.tar.bz2"
+  sha1 "8ebf863a2bb81f5c9ca5bd70ff77997084c97972"
+
+  bottle do
+    cellar :any
+    sha1 "d3fc3ea698a98ed6e1c1392fbe0a6302e9f9559e" => :mavericks
+    sha1 "b7559789badd44d8c890a64ca4fced4d1d1e6cb9" => :mountain_lion
+    sha1 "cac59a0b84adb0a44369d9ef1513c2ffe35e4f43" => :lion
+  end
 
   devel do
-    url "https://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/29.0b1/source/xulrunner-29.0b1.source.tar.bz2"
-    sha1 "80ea2209c0ea9316b5c8dc16208514d14c410c22"
-    version "29.0b1"
+    url "https://ftp.mozilla.org/pub/mozilla.org/xulrunner/releases/30.0b1/source/xulrunner-30.0b1.source.tar.bz2"
+    sha1 "a3129b91738be992180436750828f6d43e7c5a21"
+    version "30.0b1"
   end
 
   head do
@@ -57,6 +64,7 @@ class Xulrunner < Formula
   depends_on "gnu-tar" => :build
   depends_on "pkg-config" => :build
   depends_on "yasm"
+  depends_on "nss"
 
   fails_with :gcc do
     cause "Mozilla XULRunner only supports Clang on OS X"
@@ -89,20 +97,19 @@ class Xulrunner < Formula
       ac_add_options --disable-updater
       ac_add_options --disable-crashreporter
       ac_add_options --with-macos-sdk=#{MacOS.sdk_path}
+      ac_add_options --with-nss-prefix=#{Formula["nss"].opt_prefix}
     EOS
     # fixed usage of bsdtar with unsupported parameters (replaced with gnu-tar)
     inreplace "toolkit/mozapps/installer/packager.mk", "$(TAR) -c --owner=0 --group=0 --numeric-owner",
-              "#{Formula["gnu-tar"].bin}/gtar -c --owner=0 --group=0 --numeric-owner"
+              "#{Formula["gnu-tar"].opt_bin}/gtar -c --owner=0 --group=0 --numeric-owner"
 
-    # nss is not fully parallel build safe (fixes rare ld: library not found for -lplc4 issues)
-    ENV.deparallelize
     system "make", "-f", "client.mk", "build"
     system "make", "-f", "client.mk", "package"
 
     frameworks.mkpath
     if build.head?
       # update HEAD version here with every version bump
-      tar_path = "objdir/dist/xulrunner-31.0a1.en-US.mac64.tar.bz2"
+      tar_path = "objdir/dist/xulrunner-32.0a1.en-US.mac64.tar.bz2"
     else
       tar_path = "objdir/dist/xulrunner-#{version.to_s[/\d+\.\d+(\.\d+)?/]}.en-US.mac64.tar.bz2"
     end

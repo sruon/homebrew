@@ -1,14 +1,15 @@
 require 'formula'
 
 class Glib < Formula
-  homepage 'http://developer.gnome.org/glib/'
-  url 'http://ftp.gnome.org/pub/gnome/sources/glib/2.38/glib-2.38.2.tar.xz'
-  sha256 '056a9854c0966a0945e16146b3345b7a82562a5ba4d5516fd10398732aea5734'
+  homepage "http://developer.gnome.org/glib/"
+  url "http://ftp.gnome.org/pub/gnome/sources/glib/2.40/glib-2.40.0.tar.xz"
+  sha256 "0d27f195966ecb1995dcce0754129fd66ebe820c7cd29200d264b02af1aa28b5"
+  revision 1
 
   bottle do
-    sha1 "4859364747094843599c19a42d7d150f91629f6c" => :mavericks
-    sha1 "bd656d91c1641f0f12a0c509c60a7cb7b10416de" => :mountain_lion
-    sha1 "2530552dce455e85f109ebeb090843cd9d7c4630" => :lion
+    sha1 "744e1082ceb6840c320e2df02d7aed1c9cd1ae7c" => :mavericks
+    sha1 "ab53e313c471f4112dc3966b543756b40e8c3a2b" => :mountain_lion
+    sha1 "0ff3d77f6205d79189d84e1ec2500dbce2528acc" => :lion
   end
 
   option :universal
@@ -34,25 +35,28 @@ class Glib < Formula
   # but needed to fix an assumption about the location of the d-bus machine
   # id file.
   patch do
-    url "https://gist.github.com/jacknagel/6700436/raw/a94f21a9c5ccd10afa0a61b11455c880640f3133/glib-configurable-paths.patch"
-    sha1 "911df7b09452c52ee3e0d269775d546cf7c077d1"
+    url "https://gist.githubusercontent.com/jacknagel/af332f42fae80c570a77/raw/a738786e0f7ea46c4a93a36a3d9d569017cca7f2/glib-hardcoded-paths.diff"
+    sha1 "ce54abdbb4386902a33dbad7cb6c8f1b0cbdab0d"
   end
 
   # Fixes compilation with FSF GCC. Doesn't fix it on every platform, due
   # to unrelated issues in GCC, but improves the situation.
   # Patch submitted upstream: https://bugzilla.gnome.org/show_bug.cgi?id=672777
   patch do
-    url "https://gist.github.com/mistydemeo/8c7eaf0940b6b9159779/raw/11b3b1f09d15ccf805b0914a15eece11685ea8a5/gio.diff"
-    sha1 "5afea1a284747d31039449ca970376430951ec55"
+    url "https://gist.githubusercontent.com/jacknagel/9835034/raw/b0388e86f74286f4271f9b0dca8219fdecafd5e3/gio.patch"
+    sha1 "32158fffbfb305296f7665ede6185a47d6f6b389"
   end
 
-  patch :p0 do
-    url "https://trac.macports.org/export/111532/trunk/dports/devel/glib2/files/patch-configure.diff"
-    sha1 "5afea1a284747d31039449ca970376430951ec55"
+  patch do
+    url "https://gist.githubusercontent.com/jacknagel/9726139/raw/9d5635480d96d6b5c717d2c0d5d24de38b68ffbd/universal.patch"
+    sha1 "7f38cab550571b39989275362995ade214b44490"
   end if build.universal?
 
   def install
     ENV.universal_binary if build.universal?
+
+    inreplace %w[gio/gdbusprivate.c gio/xdgmime/xdgmime.c glib/gutils.c],
+      "@@HOMEBREW_PREFIX@@", HOMEBREW_PREFIX
 
     # Disable dtrace; see https://trac.macports.org/ticket/30413
     args = %W[

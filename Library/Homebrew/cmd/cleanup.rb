@@ -10,12 +10,27 @@ module Homebrew extend self
     if ARGV.named.empty?
       cleanup_cellar
       cleanup_cache
+      cleanup_logs
       unless ARGV.dry_run?
         cleanup_lockfiles
         rm_DS_Store
       end
     else
       ARGV.formulae.each { |f| cleanup_formula(f) }
+    end
+  end
+
+  def cleanup_logs
+    time = Time.now - 2 * 7 * 24 * 60 * 60 # two weeks
+    HOMEBREW_LOGS.subdirs.each do |dir|
+      if dir.mtime < time
+        if ARGV.dry_run?
+          puts "Would remove: #{dir}"
+        else
+          puts "Removing: #{dir}..."
+          dir.rmtree
+        end
+      end
     end
   end
 
@@ -114,7 +129,7 @@ class Formula
         select{ |ff| ff.deps.map{ |d| d.to_s }.include? name }.
         map{ |ff| ff.rack.subdirs rescue [] }.
         flatten.
-        map{ |keg_path| Tab.for_keg(keg_path).send("HEAD") }.
+        map{ |keg_path| Tab.for_keg(keg_path).HEAD }.
         include? nil
     end
   end

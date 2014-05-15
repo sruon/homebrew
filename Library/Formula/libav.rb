@@ -2,14 +2,15 @@ require 'formula'
 
 class Libav < Formula
   homepage 'https://libav.org/'
-  url 'http://libav.org/releases/libav-9.11.tar.xz'
-  sha1 '4eb48cbe70515734f70bde8dceff28896d76adf2'
+  url 'https://libav.org/releases/libav-10.1.tar.xz'
+  sha1 'e73596a99c228714d28956668a298a05948da4a7'
+
   head 'git://git.libav.org/libav.git'
 
   bottle do
-    sha1 "189d6d475037c6ef0fa4911b5e3cc99e4c2e6a5c" => :mavericks
-    sha1 "83f1183b38fbf58d847a180c1c0f5d4d3f7745bd" => :mountain_lion
-    sha1 "874965f99e97869e88a24e09e494d1f49ed83ba3" => :lion
+    sha1 "7d0726f20807795bea2751d1cf5819574b4216ef" => :mavericks
+    sha1 "6dab153fa7f47bad485084fb1d99ed78474ee41b" => :mountain_lion
+    sha1 "af1e80266ca266455031390bf45ecbc23ef94e0e" => :lion
   end
 
   option "without-faac", "Disable AAC encoder via faac"
@@ -56,8 +57,6 @@ class Libav < Formula
   depends_on 'sdl' => :optional
   depends_on 'speex' => :optional
   depends_on 'theora' => :optional
-
-  patch :DATA
 
   def install
     args = [
@@ -111,25 +110,3 @@ class Libav < Formula
     system "#{bin}/avconv -h"
   end
 end
-
-__END__
-# Patch configure to use require_pkg_config so it will use correct include path.
-#
-# Upstream bugs relating to this patch:
-#
-# https://bugzilla.libav.org/show_bug.cgi?id=387
-# https://bugzilla.libav.org/show_bug.cgi?id=405
-# https://bugzilla.libav.org/show_bug.cgi?id=569
-diff --git a/tmp/libav-9.9/configure b/configure
-index 6ab04ae..5ccd2b7 100755
---- a/tmp/libav-9.9/configure
-+++ b/configure
-@@ -3488,7 +3488,7 @@ enabled libmp3lame && require  "libmp3lame >= 3.98.3" lame/lame.h lame_set_VBR_q
- enabled libopencore_amrnb  && require libopencore_amrnb opencore-amrnb/interf_dec.h Decoder_Interface_init -lopencore-amrnb
- enabled libopencore_amrwb  && require libopencore_amrwb opencore-amrwb/dec_if.h D_IF_init -lopencore-amrwb
- enabled libopencv  && require_pkg_config opencv opencv/cv.h cvCreateImageHeader
--enabled libopenjpeg && require libopenjpeg openjpeg.h opj_version -lopenjpeg
-+enabled libopenjpeg && require_pkg_config libopenjpeg openjpeg.h opj_version
- enabled libopus    && require_pkg_config opus opus_multistream.h opus_multistream_decoder_create
- enabled libpulse && require_pkg_config libpulse-simple pulse/simple.h pa_simple_new
- enabled librtmp    && require_pkg_config librtmp librtmp/rtmp.h RTMP_Socket

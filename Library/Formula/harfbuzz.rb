@@ -2,14 +2,14 @@ require 'formula'
 
 class Harfbuzz < Formula
   homepage 'http://www.freedesktop.org/wiki/Software/HarfBuzz'
-  url 'http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.26.tar.bz2'
-  sha256 '5ded7dc3d15fb5c9230d7a224b9256b67b35fde30193b4c3a4c3f6b13110e257'
+  url 'http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-0.9.28.tar.bz2'
+  sha256 'a567f7c58018af0a9751e18641fd8434bfcef8307122dabe47dd652ce8bde048'
 
   bottle do
     cellar :any
-    sha1 "f070bb22af0d70c2f6d23ed192814b3358f45ac6" => :mavericks
-    sha1 "17ade866edc8b1231f88cfee067f588c17f013db" => :mountain_lion
-    sha1 "1a0cd3cde6b86554a04d9f6fef0d79d0459ff30b" => :lion
+    sha1 "77e8c83c64140d68ac8bbc4ec2673f4e6169034f" => :mavericks
+    sha1 "6e002a4ccc3d53226b1a73252f6b4716f2cbf8e8" => :mountain_lion
+    sha1 "f152cab6c0dd71ea9fa0b904c95792935cbbd76a" => :lion
   end
 
   depends_on 'pkg-config' => :build

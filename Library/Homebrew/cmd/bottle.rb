@@ -9,6 +9,9 @@ require 'extend/pathname'
 
 BOTTLE_ERB = <<-EOS
   bottle do
+    <% if root_url != BottleSpecification.new.root_url %>
+    root_url "<%= root_url %>"
+    <% end %>
     <% if prefix.to_s != "/usr/local" %>
     prefix "<%= prefix %>"
     <% end %>
@@ -84,7 +87,7 @@ module Homebrew extend self
     end
 
     index = 0
-    Pathname.new(keg).find do |pn|
+    keg.find do |pn|
       if pn.symlink? && (link = pn.readlink).absolute?
         if link.to_s.start_with?(string)
           opoo "Absolute symlink starting with #{string}:" if index.zero?
@@ -181,7 +184,10 @@ module Homebrew extend self
       end
     end
 
+    root_url = ARGV.value("root_url")
+
     bottle = BottleSpecification.new
+    bottle.root_url(root_url) if root_url
     bottle.prefix HOMEBREW_PREFIX
     bottle.cellar relocatable ? :any : HOMEBREW_CELLAR
     bottle.revision bottle_revision
@@ -240,8 +246,11 @@ module Homebrew extend self
           end
         end
 
+        version = f.version.to_s
+        version += "_#{f.revision}" if f.revision.to_i > 0
+
         safe_system 'git', 'commit', '--no-edit', '--verbose',
-          "--message=#{f.name}: #{update_or_add} #{f.version} bottle.",
+          "--message=#{f.name}: #{update_or_add} #{version} bottle.",
           '--', f.path
       end
     end
